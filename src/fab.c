@@ -16,11 +16,11 @@ char* make_format(size_t len) {
     while(count < total_length-2) {
         format[count] = '%';
         format[count+1] = 'd';
-        count += 2;
         if(count < total_length - 3) {
             format[count+2] = ';';
-            count++;
+            count += 1;
         }
+        count += 2;
     }
     format[total_length-2] = 'm';
     format[total_length-1] = '\0';
@@ -109,4 +109,82 @@ char *apply_format(Color c, char *line) {
     free(start);
     free(end);
     return result;
+}
+
+rgb_t xterm_to_rgb(int xcolor) {
+    rgb_t res;
+    if (xcolor < 16) {
+        res = BASIC16[xcolor];
+    } else if (16 <= xcolor && xcolor <= 231) {
+        xcolor -= 16;
+        res.r = CUBE_STEPS[(xcolor / 36) % 6];
+        res.g = CUBE_STEPS[(xcolor / 6) % 6];
+        res.b = CUBE_STEPS[xcolor % 6];
+    } else if (232 <= xcolor && xcolor <= 255) {
+        res.r = res.g = res.b = 8 + (xcolor - 232) * 0x0A;
+    }
+    return res;
+}
+
+
+/**
+ * * This function provides a quick and dirty way to serialize an rgb_t
+ * * struct to an int which can be decoded by our Python code using
+ * * ctypes.
+ * */
+int xterm_to_rgb_i(int xcolor)
+{
+    rgb_t res = xterm_to_rgb(xcolor);
+    return (res.r << 16) | (res.g << 8) | (res.b << 0);
+}
+
+
+/**
+ * * Quantize RGB values to an xterm 256-color ID
+ * */
+int rgb_to_xterm(int r, int g, int b)
+{
+    if(rgb_init == false) {
+       int c;
+       for (c = 0; c < 256; c++) {
+           COLOR_TABLE[c] = xterm_to_rgb(c);
+       }
+       rgb_init = true;
+    }
+    int best_match = 0;
+    int smallest_distance = 1000000000;
+    int c, d;
+    for (c = 16; c < 256; c++) {
+        d = sqr(COLOR_TABLE[c].r - r) +
+            sqr(COLOR_TABLE[c].g - g) +
+            sqr(COLOR_TABLE[c].b - b);
+        if (d < smallest_distance) {
+            smallest_distance = d;
+            best_match = c;
+        }
+    }
+    return best_match;
+}
+
+char *colorize(char* start, char* end, char* line) {
+    char *result;
+    asprintf(&result, "%s%s%s", start, line, end);
+    free(start);
+    free(end);
+    return result;
+}
+
+char *foreground_256(rgb_t color, char *line) {
+    int xcolor = rgb_to_xterm(color.r, color.g, color.b);
+    return colorize(escape(3, 38, 5, xcolor), escape(1, 39), line);
+}
+
+char *background_256(rgb_t color, char *line) {
+    int xcolor = rgb_to_xterm(color.r, color.g, color.b);
+    return colorize(escape(3, 48, 5, xcolor), escape(1, 49), line);
+}
+
+char *highlight_256(rgb_t color, char *line) {
+    int xcolor = rgb_to_xterm(color.r, color.g, color.b);
+    return colorize(escape(4, 38, 5, xcolor, 7), escape(3, 27, 39, 22), line);
 }
