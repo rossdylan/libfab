@@ -71,6 +71,38 @@ char *apply_format(Color c, char *line) {
             start = escape(1, 7);
             end = escape(1, 27);
             break;
+        case BLACK:
+            start = escape(1, 30);
+            end = escape(1, 39);
+            break;
+        case RED:
+            start = escape(1, 31);
+            end = escape(1, 39);
+            break;
+        case GREEN:
+            start = escape(1, 32);
+            end = escape(1, 39);
+            break;
+        case YELLOW:
+            start = escape(1, 33);
+            end = escape(1, 39);
+            break;
+        case BLUE:
+            start = escape(1, 34);
+            end = escape(1, 39);
+            break;
+        case MAGENTA:
+            start = escape(1, 35);
+            end = escape(1, 39);
+            break;
+        case CYAN:
+            start = escape(1, 36);
+            end = escape(1, 39);
+            break;
+        case WHITE:
+            start = escape(1, 37);
+            end = escape(1, 39);
+            break;
         default: return NULL;
     }
     asprintf(&result, "%s%s%s", start, line, end);
