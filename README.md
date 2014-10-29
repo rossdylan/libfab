@@ -11,5 +11,9 @@ and to improve upon a library I enjoy using.
 
 Porting Status
 ==============
-[] Terminal Text Formatting
-[] Images in the terminal
+[x] Text Formatting
+[x] Basic Text Coloring
+[x] 256color text Coloring
+[ ] Color Complements
+[ ] Advanced Color specification
+[ ] Images -> ASCII
