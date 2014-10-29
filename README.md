@@ -11,9 +11,9 @@ and to improve upon a library I enjoy using.
 
 Porting Status
 ==============
-[x] Text Formatting
-[x] Basic Text Coloring
-[x] 256color text Coloring
-[ ] Color Complements
-[ ] Advanced Color specification
-[ ] Images -> ASCII
+- [x] Text Formatting
+- [x] Basic Text Coloring
+- [x] 256color text Coloring
+- [ ] Color Complements
+- [ ] Advanced Color specification
+- [ ] Images -> ASCII
