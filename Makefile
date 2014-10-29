@@ -1,8 +1,8 @@
 PREFIX := /usr/local
 CFLAGS := -I./include
-CFLAGS += -Wall -Wextra -fPIC -pedantic
+CFLAGS += -std=c99 -Wall -Wextra -fPIC -pedantic
 ifeq ($(CC),gcc)
-    CFLAGS += -std=c11 -ggdb3
+    CFLAGS += -ggdb3
 endif
 ifeq ($(CC),clang)
     CFLAGS += -ggdb -Weverything
@@ -21,10 +21,10 @@ shared: fab.o
 libfab.a: fab.o
 	$(AR) $(ARFLAGS) libfab.a fab.o
 fab.o: src/fab.c
-	$(CC) -c $(CFLAGS) $(INCLUDE) src/fab.c
+	$(CC) -c $(CFLAGS) $(INCLUDE) $(SOURCE)
 
 .PHONY: install
-install: 
+install:
 	cp libfab.a /usr/local/lib/
 	chown root /usr/local/lib/libfab.a
 	chmod 0755 /usr/local/lib/libfab.a
