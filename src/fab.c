@@ -103,7 +103,70 @@ char *apply_format(Color c, char *line) {
             start = escape(1, 37);
             end = escape(1, 39);
             break;
-        default: return NULL;
+        case HBLACK:
+            start = escape(3, 1, 30, 7);
+            end = escape(3, 22, 27, 39);
+            break;
+        case HRED:
+            start = escape(3, 1, 31, 7);
+            end = escape(3, 22, 27, 39);
+            break;
+        case HGREEN:
+            start = escape(3, 1, 32, 7);
+            end = escape(3, 22, 27, 39);
+            break;
+        case HYELLOW:
+            start = escape(3, 1, 33, 7);
+            end = escape(3, 22, 27, 39);
+            break;
+        case HBLUE:
+            start = escape(3, 1, 34, 7);
+            end = escape(3, 22, 27, 39);
+            break;
+        case HMAGENTA:
+            start = escape(3, 1, 35, 7);
+            end = escape(3, 22, 27, 39);
+            break;
+        case HCYAN:
+            start = escape(3, 1, 36, 7);
+            end = escape(3, 22, 27, 39);
+            break;
+        case HWHITE:
+            start = escape(3, 1, 37, 7);
+            end = escape(3, 22, 27, 39);
+            break;
+        case BGBLACK:
+            start = escape(1, 40);
+            end = escape(1, 49);
+            break;
+        case BGRED:
+            start = escape(1, 41);
+            end = escape(1, 49);
+            break;
+        case BGGREEN:
+            start = escape(1, 42);
+            end = escape(1, 49);
+            break;
+        case BGYELLOW:
+            start = escape(1, 43);
+            end = escape(1, 49);
+            break;
+        case BGBLUE:
+            start = escape(1, 44);
+            end = escape(1, 49);
+            break;
+        case BGMAGENTA:
+            start = escape(1, 45);
+            end = escape(1, 49);
+            break;
+        case BGCYAN:
+            start = escape(1, 46);
+            end = escape(1, 49);
+            break;
+        case BGWHITE:
+            start = escape(1, 47);
+            end = escape(1, 49);
+            break;
     }
     asprintf(&result, "%s%s%s", start, line, end);
     free(start);
