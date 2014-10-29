@@ -6,13 +6,13 @@
 char* make_format(size_t len) {
     size_t esc_size = strlen("\x1b[");
     size_t total_length = (len * 2) + (len - 1) + 2 + esc_size;
+    size_t count = esc_size;
     char *format;
     if((format = calloc(sizeof(char), total_length)) == NULL) {
         perror("malloc");
         exit(EXIT_FAILURE);
     }
     strncpy(format,"\x1b[", esc_size);
-    size_t count = esc_size;
     while(count < total_length-2) {
         format[count] = '%';
         format[count+1] = 'd';
@@ -207,6 +207,9 @@ int xterm_to_rgb_i(int xcolor)
  * */
 int rgb_to_xterm(int r, int g, int b)
 {
+    int best_match = 0;
+    int smallest_distance = 1000000000;
+    int c, d;
     if(rgb_init == false) {
        int c;
        for (c = 0; c < 256; c++) {
@@ -214,9 +217,6 @@ int rgb_to_xterm(int r, int g, int b)
        }
        rgb_init = true;
     }
-    int best_match = 0;
-    int smallest_distance = 1000000000;
-    int c, d;
     for (c = 16; c < 256; c++) {
         d = sqr(COLOR_TABLE[c].r - r) +
             sqr(COLOR_TABLE[c].g - g) +
