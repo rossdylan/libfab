@@ -1,7 +1,9 @@
 #ifndef _FAB_H
 #define _FAB_H
 
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE
+#endif
 #define sqr(x) ((x) * (x))
 
 #include <stdint.h>
