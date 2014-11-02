@@ -8,6 +8,18 @@ however it hasn't seen an update in a while. libfab is a port of the core functi
 Once it is ported wrappers to other languages can be made. I'm working on this to improve my knowledge of C,
 and to improve upon a library I enjoy using.
 
+Building
+========
+
+You can use either `make` or [tup][https://github.com/gittup/tup] to build
+libfab.
+
+To use tup, clone it `git clone https://github.com/gittup/tup` and use
+their `bootstrap.sh` script to build the tup binary.
+
+Once tup is built, you need to run `tup init` the first time, then all
+subsequent builds you can use `tup upd` or just `tup` to rebuild libfab and its
+libraries.
 
 Porting Status
 ==============
