@@ -13,10 +13,10 @@ ARFLAGS=rvs
 
 SOURCE := $(wildcard src/*.c)
 
-all: libfab.a
+all: libfab.a libfab.so
 
 .PHONY: shared
-shared: fab.o
+libfab.so: fab.o
 	$(CC) -shared -o libfab.so fab.o
 libfab.a: fab.o
 	$(AR) $(ARFLAGS) libfab.a fab.o
