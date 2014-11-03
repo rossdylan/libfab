@@ -1,0 +1,5 @@
+CFLAGS = -Wall -Wextra -fPIC -pedantic -ggdb3 -std=c99
+
+: src/fab.c |> gcc -I./include $(CFLAGS) -c %f -o %o |> %B.o
+: fab.o |> ar rvs %o %f |> libfab.a
+: fab.o |> gcc $(CFLAGS) -shared -o %o %f |> libfab.so
