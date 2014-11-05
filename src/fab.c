@@ -33,7 +33,7 @@ char *escape(size_t len, ...) {
     char* combined;
     va_list argptr;
     va_start(argptr, len);
-    vasprintf(&combined, main_format, argptr);
+    if(vasprintf(&combined, main_format, argptr)){};
     va_end(argptr);
     free(main_format);
     return combined;
@@ -169,7 +169,7 @@ char *apply_format(Color c, const char *line) {
             end = escape(1, 49);
             break;
     }
-    asprintf(&result, "%s%s%s", start, line, end);
+    if(asprintf(&result, "%s%s%s", start, line, end)){};
     free(start);
     free(end);
     return result;
@@ -232,7 +232,7 @@ int rgb_to_xterm(int r, int g, int b)
 
 char *colorize(char* start, char* end, const char* line) {
     char *result;
-    asprintf(&result, "%s%s%s", start, line, end);
+    if(asprintf(&result, "%s%s%s", start, line, end)){};
     free(start);
     free(end);
     return result;
