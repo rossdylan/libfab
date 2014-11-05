@@ -33,7 +33,14 @@ char *escape(size_t len, ...) {
     char* combined;
     va_list argptr;
     va_start(argptr, len);
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wformat-nonliteral"
+#endif
     vasprintf(&combined, main_format, argptr);
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
     va_end(argptr);
     free(main_format);
     return combined;
@@ -212,7 +219,6 @@ int rgb_to_xterm(int r, int g, int b)
     int smallest_distance = 1000000000;
     int c, d;
     if(rgb_init == false) {
-       int c;
        for (c = 0; c < 256; c++) {
            COLOR_TABLE[c] = xterm_to_rgb(c);
        }
