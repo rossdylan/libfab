@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <sys/ioctl.h>
+#include <wand/MagickWand.h>
+#include <math.h>
 
 
 /**
@@ -283,4 +286,95 @@ char *background_256(rgb_t color, const char *line) {
 char *highlight_256(rgb_t color, const char *line) {
     int xcolor = rgb_to_xterm(color.r, color.g, color.b);
     return colorize(escape(4, 38, 5, xcolor, 7), escape(3, 27, 39, 22), line);
+}
+
+size_t min(size_t x, size_t y) {
+    if(x < y) {
+        return x;
+    }
+    return y;
+}
+
+xcolor_image_t *image_to_xterm(char *path) {
+    struct winsize ws;
+    ioctl(0, TIOCGWINSZ, &ws);
+    MagickWand *wand;
+    MagickBooleanType status;
+    MagickPixelPacket pixel;
+    PixelIterator *iterator;
+    PixelWand **pixels;
+
+    MagickWandGenesis();
+    wand = NewMagickWand();
+    status = MagickReadImage(wand, path);
+    if(status == MagickFalse) {
+        exit(EXIT_FAILURE);
+    }
+    int **xterm_colors = NULL;
+    MagickResetIterator(wand);
+    size_t row_width = 0;
+    size_t im_height = 0;
+    size_t im_width = 0;
+    size_t width = 0;
+    size_t height = 0;
+    while(MagickNextImage(wand) != MagickFalse) {
+        MagickTransformImageColorspace(wand, RGBColorspace);
+
+        // Get the actual width and height of the original image
+        im_height = MagickGetImageHeight(wand);
+        im_width = MagickGetImageWidth(wand);
+        // Calculate the new width and height of the image
+        width = min(im_width, (size_t) ws.ws_col);
+        height = ((im_height * width) / im_width) / 2;
+        MagickAdaptiveResizeImage(wand, width, height);
+
+        // iterate through all the pixels
+        iterator = NewPixelIterator(wand);
+        if((xterm_colors = calloc(actual, sizeof(int *))) == NULL) {
+            perror("calloc");
+            exit(EXIT_FAILURE);
+        }
+
+        for(size_t y = 0; y < height; y++) {
+            pixels = PixelGetNextIteratorRow(iterator, &row_width);
+            if(pixels == (PixelWand **) NULL) {
+                break;
+            }
+            if((xterm_colors[y] = calloc(row_width, sizeof(int))) == NULL) {
+                perror("calloc");
+                exit(EXIT_FAILURE);
+            }
+            for(size_t x = 0; x < row_width; x++) {
+                PixelGetMagickColor(pixels[x], &pixel);
+                int xc = rgb_to_xterm(ceilf(pixel.red) / 255 , ceilf(pixel.green) / 255, ceilf(pixel.blue) / 255);
+                xterm_colors[y][x] = xc;
+            }
+        }
+        iterator = DestroyPixelIterator(iterator);
+        break;
+    }
+    // We don't need imagemagick anymore, shut it down
+    wand = DestroyMagickWand(wand);
+    xcolor_image_t *xcolor_image;
+    if((xcolor_image = malloc(sizeof(xcolor_image_t))) == NULL) {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+    xcolor_image->x = row_width;
+    xcolor_image->y = actual_height;
+    xcolor_image->pixels = xterm_colors;
+    return xcolor_image;
+}
+
+char *reduce_image(xcolor_image_t *image) {
+    size_t count = 0;
+    int current_code = 0;
+    for(int y = 0; y < image->y; y++) {
+        for(int x = 0; x < image->x; x++) {
+            char *color_block = colorize(escape(3, 48, 5, image->pixels[y][x]), escape(1, 49), " ");
+            printf("%s", color_block);
+        }
+        printf("\n");
+    }
+    return NULL;
 }
