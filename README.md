@@ -11,7 +11,7 @@ and to improve upon a library I enjoy using.
 Building
 ========
 
-You can use either `make` or [tup][https://github.com/gittup/tup] to build
+You can use either `make` or [tup](https://github.com/gittup/tup) to build
 libfab.
 
 To use tup, clone it `git clone https://github.com/gittup/tup` and use

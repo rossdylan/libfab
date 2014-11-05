@@ -39,7 +39,7 @@ char *escape(size_t len, ...) {
     return combined;
 }
 
-char *apply_format(Color c, char *line) {
+char *apply_format(Color c, const char *line) {
     char *result;
     char *start;
     char *end;
@@ -230,7 +230,7 @@ int rgb_to_xterm(int r, int g, int b)
     return best_match;
 }
 
-char *colorize(char* start, char* end, char* line) {
+char *colorize(char* start, char* end, const char* line) {
     char *result;
     asprintf(&result, "%s%s%s", start, line, end);
     free(start);
@@ -238,17 +238,17 @@ char *colorize(char* start, char* end, char* line) {
     return result;
 }
 
-char *foreground_256(rgb_t color, char *line) {
+char *foreground_256(rgb_t color, const char *line) {
     int xcolor = rgb_to_xterm(color.r, color.g, color.b);
     return colorize(escape(3, 38, 5, xcolor), escape(1, 39), line);
 }
 
-char *background_256(rgb_t color, char *line) {
+char *background_256(rgb_t color, const char *line) {
     int xcolor = rgb_to_xterm(color.r, color.g, color.b);
     return colorize(escape(3, 48, 5, xcolor), escape(1, 49), line);
 }
 
-char *highlight_256(rgb_t color, char *line) {
+char *highlight_256(rgb_t color, const char *line) {
     int xcolor = rgb_to_xterm(color.r, color.g, color.b);
     return colorize(escape(4, 38, 5, xcolor, 7), escape(3, 27, 39, 22), line);
 }
