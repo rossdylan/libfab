@@ -75,12 +75,12 @@ int rgb_to_xterm(int r, int g, int b);
 char *make_format(size_t len);
 void free_format(char *format);
 
-char *apply_format(Color c, char *line);
+char *apply_format(Color c, const char *line);
 char *escape(size_t len, ...);
-char *colorize(char *start, char *end, char *line);
+char *colorize(char *start, char *end, const char *line);
 
-char *foreground_256(rgb_t color, char *line);
-char *background_256(rgb_t color, char *line);
-char *complement_256(rgb_t color, char *lines);
-char *highlight_256(rgb_t color, char *line);
+char *foreground_256(rgb_t color, const char *line);
+char *background_256(rgb_t color, const char *line);
+char *complement_256(rgb_t color, const char *lines);
+char *highlight_256(rgb_t color, const char *line);
 #endif
