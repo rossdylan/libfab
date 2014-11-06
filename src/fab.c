@@ -72,7 +72,7 @@ char *escape(size_t len, ...) {
     return combined;
 }
 
-char *apply_format(Color c, const char *line) {
+char *apply_color(Color c, const char *line) {
     char *result;
     char *start;
     char *end;

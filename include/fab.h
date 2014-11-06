@@ -51,7 +51,7 @@ typedef struct {
 } rgb_t;
 
 
-char *apply_format(Color c, const char *line);
+char *apply_color(Color c, const char *line);
 
 char *foreground_256(rgb_t color, const char *line);
 char *background_256(rgb_t color, const char *line);
