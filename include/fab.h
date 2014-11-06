@@ -51,15 +51,7 @@ typedef struct {
 } rgb_t;
 
 
-rgb_t xterm_to_rgb(int xcolor);
-int xterm_to_rgb_i(int xcolor);
-int rgb_to_xterm(int r, int g, int b);
-
-char *make_format(size_t len);
-
 char *apply_format(Color c, const char *line);
-char *escape(size_t len, ...);
-char *colorize(char *start, char *end, const char *line);
 
 char *foreground_256(rgb_t color, const char *line);
 char *background_256(rgb_t color, const char *line);
