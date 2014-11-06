@@ -330,7 +330,7 @@ xcolor_image_t *image_to_xterm(char *path) {
 
         // iterate through all the pixels
         iterator = NewPixelIterator(wand);
-        if((xterm_colors = calloc(actual, sizeof(int *))) == NULL) {
+        if((xterm_colors = calloc(height, sizeof(int *))) == NULL) {
             perror("calloc");
             exit(EXIT_FAILURE);
         }
@@ -361,7 +361,7 @@ xcolor_image_t *image_to_xterm(char *path) {
         exit(EXIT_FAILURE);
     }
     xcolor_image->x = row_width;
-    xcolor_image->y = actual_height;
+    xcolor_image->y = height;
     xcolor_image->pixels = xterm_colors;
     return xcolor_image;
 }
