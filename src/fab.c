@@ -4,6 +4,43 @@
 #include <stdarg.h>
 
 
+/**
+ * Interal function and struture definitions
+ */
+
+#define sqr(x) ((x) * (x))
+
+char* make_format(size_t len);
+
+char *escape(size_t len, ...);
+
+/*
+ * All the xterm <-> RGB stuff is taken from
+ * https://github.com/jart/fabulous/blob/master/fabulous/_xterm256.c
+ * Thanks to J.A. Roberts Tunney for making this.
+ */
+
+rgb_t xterm_to_rgb(int xcolor);
+
+char *colorize(char* start, char* end, const char* line);
+
+int rgb_to_xterm(int r, int g, int b);
+
+int xterm_to_rgb_i(int xcolor);
+
+static int CUBE_STEPS[] = { 0x0, 0x5f, 0x87, 0xAF, 0xD7, 0xFF };
+
+static rgb_t BASIC16[] = { { 0, 0, 0 }, { 205, 0, 0}, { 0, 205, 0 },
+    { 205, 205, 0 }, { 0, 0, 238}, { 205, 0, 205 },
+    { 0, 205, 205 }, { 229, 229, 229}, { 127, 127, 127 },
+    { 255, 0, 0 }, { 0, 255, 0}, { 255, 255, 0 },
+    { 92, 92, 255 }, { 255, 0, 255}, { 0, 255, 255 },
+    { 255, 255, 255 } };
+
+static bool rgb_init = false;
+static rgb_t COLOR_TABLE[256];
+
+
 char* make_format(size_t len) {
     size_t esc_size = strlen("\x1b[");
     size_t total_length = (len * 2) + (len - 1) + 2 + esc_size;
