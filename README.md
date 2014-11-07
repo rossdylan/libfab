@@ -29,3 +29,10 @@ Porting Status
 - [ ] Color Complements
 - [ ] Advanced Color specification
 - [ ] Images -> ASCII
+
+Attribution
+============
+The original [Fabulous](https://github.com/jart/fabulous) was a huge inspiration, and the existing code was a huge help in writing libfab
+
+The xterm, RGB conversion code, the algorithm for rendering images in the
+terminal, and the rest of fabulous were created by [Justine Tunney](https://github.com/jart/).
