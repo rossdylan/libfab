@@ -366,15 +366,33 @@ xcolor_image_t *image_to_xterm(char *path) {
     return xcolor_image;
 }
 
-char *reduce_image(xcolor_image_t *image) {
+void xcolor_image_free(xcolor_image_t *image) {
+    for(int y = 0; y < image->y; y++) {
+        free(image->pixels[y]);
+    }
+    free(image->pixels);
+    free(image);
+    image = NULL;
+}
+
+fab_buffer_t *reduce_image(xcolor_image_t *image) {
     size_t count = 0;
     int current_code = 0;
+    fab_buffer_t *buffer;
+    if((buffer = malloc(sizeof(fab_buffer_t))) == NULL) {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+    init_buffer(buffer);
     for(int y = 0; y < image->y; y++) {
         for(int x = 0; x < image->x; x++) {
-            char *color_block = colorize(escape(3, 48, 5, image->pixels[y][x]), escape(1, 49), " ");
-            printf("%s", color_block);
+            const char *color_block = colorize(escape(3, 48, 5, image->pixels[y][x]), escape(1, 49), " ");
+            append_buffer(buffer, color_block);
+            free((void *)color_block);
         }
-        printf("\n");
+        append_buffer(buffer, "\n");
     }
-    return NULL;
+    truncate_buffer(buffer);
+    return buffer;
 }
+

@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdbool.h>
+#include "buffer.h"
 
 
 typedef enum {
@@ -64,5 +65,6 @@ char *highlight_256(rgb_t color, const char *line);
 
 size_t min(size_t x, size_t y);
 xcolor_image_t *image_to_xterm(char *path);
-char *reduce_image(xcolor_image_t *image);
+fab_buffer_t *reduce_image(xcolor_image_t *image);
+void xcolor_image_free(xcolor_image_t *image);
 #endif

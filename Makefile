@@ -18,12 +18,15 @@ SOURCE := $(wildcard src/*.c)
 all: libfab.a libfab.so
 
 .PHONY: shared
-libfab.so: fab.o
-	$(CC) -shared -o libfab.so fab.o $(LIBRARIES)
-libfab.a: fab.o
-	$(AR) $(ARFLAGS) libfab.a fab.o
+libfab.so: fab.o buffer.o
+	$(CC) -shared -o libfab.so fab.o buffer.o $(LIBRARIES)
+libfab.a: fab.o buffer.o
+	$(AR) $(ARFLAGS) libfab.a fab.o buffer.o
+
+buffer.o: src/buffer.c
+	$(CC) -c $(CFLAGS) $(INCLUDE) src/buffer.c
 fab.o: src/fab.c
-	$(CC) -c $(CFLAGS) $(INCLUDE) $(SOURCE)
+	$(CC) -c $(CFLAGS) $(INCLUDE) src/fab.c
 
 .PHONY: install
 install:
