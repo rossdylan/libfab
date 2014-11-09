@@ -8,8 +8,6 @@
 
 #define BUFFER_START_SIZE 32
 
-uint64_t realloc_count = 0;
-
 uint64_t chkmul(uint64_t a, uint64_t b);
 uint64_t chkadd(uint64_t a, uint64_t b);
 uint64_t chksub(uint64_t a, uint64_t b);
@@ -58,7 +56,6 @@ uint64_t append_buffer(fab_buffer_t *buffer, const char *string) {
                 exit(EXIT_FAILURE);
             }
             buffer->buffer_size = new_size;
-            realloc_count += 1;
         }
         else {
             break;

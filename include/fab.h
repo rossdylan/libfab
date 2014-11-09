@@ -52,8 +52,8 @@ typedef struct {
 } rgb_t;
 
 typedef struct {
-    int y;
-    int x;
+    size_t y;
+    size_t x;
     int **pixels;
 } xcolor_image_t;
 

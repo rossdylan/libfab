@@ -346,7 +346,7 @@ xcolor_image_t *image_to_xterm(char *path) {
             }
             for(size_t x = 0; x < row_width; x++) {
                 PixelGetMagickColor(pixels[x], &pixel);
-                int xc = rgb_to_xterm(ceilf(pixel.red) / 255 , ceilf(pixel.green) / 255, ceilf(pixel.blue) / 255);
+                int xc = rgb_to_xterm((int)(pixel.red / 255) , (int)(pixel.green / 255), (int)(pixel.blue / 255));
                 xterm_colors[y][x] = xc;
             }
         }
@@ -367,7 +367,7 @@ xcolor_image_t *image_to_xterm(char *path) {
 }
 
 void xcolor_image_free(xcolor_image_t *image) {
-    for(int y = 0; y < image->y; y++) {
+    for(size_t y = 0; y < image->y; y++) {
         free(image->pixels[y]);
     }
     free(image->pixels);
@@ -376,16 +376,14 @@ void xcolor_image_free(xcolor_image_t *image) {
 }
 
 fab_buffer_t *reduce_image(xcolor_image_t *image) {
-    size_t count = 0;
-    int current_code = 0;
     fab_buffer_t *buffer;
     if((buffer = malloc(sizeof(fab_buffer_t))) == NULL) {
         perror("malloc");
         exit(EXIT_FAILURE);
     }
     init_buffer(buffer);
-    for(int y = 0; y < image->y; y++) {
-        for(int x = 0; x < image->x; x++) {
+    for(size_t y = 0; y < image->y; y++) {
+        for(size_t x = 0; x < image->x; x++) {
             const char *color_block = colorize(escape(3, 48, 5, image->pixels[y][x]), escape(1, 49), " ");
             append_buffer(buffer, color_block);
             free((void *)color_block);
