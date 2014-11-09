@@ -5,6 +5,7 @@
 #include <sys/ioctl.h>
 #include <wand/MagickWand.h>
 #include <math.h>
+#include "buffer.h"
 
 
 /**
@@ -375,7 +376,7 @@ void xcolor_image_free(xcolor_image_t *image) {
     image = NULL;
 }
 
-fab_buffer_t *reduce_image(xcolor_image_t *image) {
+char *image_to_string(xcolor_image_t *image) {
     fab_buffer_t *buffer;
     if((buffer = malloc(sizeof(fab_buffer_t))) == NULL) {
         perror("malloc");
@@ -391,6 +392,8 @@ fab_buffer_t *reduce_image(xcolor_image_t *image) {
         append_buffer(buffer, "\n");
     }
     truncate_buffer(buffer);
-    return buffer;
+    char *string = buffer->buffer;
+    free(buffer);
+    return string;
 }
 

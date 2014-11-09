@@ -149,8 +149,8 @@ int main(int argc, char** argv) {
     free(h256);
 
     xcolor_image_t *image = image_to_xterm("/home/rossdylan/Downloads/10469154_10204348274165961_3225173628639169213_o.jpg");
-    fab_buffer_t *buffer = reduce_image(image);
-    printf("%s", buffer->buffer);
-    free_buffer(buffer);
+    char *image_text = image_to_string(image);
+    printf("%s", image_text);
+    free(image_text);
     xcolor_image_free(image);
 }
