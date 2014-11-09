@@ -47,19 +47,21 @@ void init_buffer(fab_buffer_t *buffer) {
 
 uint64_t append_buffer(fab_buffer_t *buffer, const char *string) {
     uint64_t str_size = strlen(string);
-    uint64_t new_size = 0;
+    uint64_t new_size = buffer->buffer_size;
     while(true) {
-        if(chkadd(str_size, buffer->data_size) >= buffer->buffer_size) {
-            new_size = chkmul(buffer->buffer_size, 2);
-            if((buffer->buffer = realloc(buffer->buffer, new_size)) == NULL) {
-                perror("realloc");
-                exit(EXIT_FAILURE);
-            }
-            buffer->buffer_size = new_size;
+        if(chkadd(str_size, buffer->data_size) >= new_size) {
+            new_size = chkmul(new_size, 2);
         }
         else {
             break;
         }
+    }
+    if(buffer->buffer_size != new_size) {
+        if((buffer->buffer = realloc(buffer->buffer, new_size)) == NULL) {
+            perror("realloc");
+            exit(EXIT_FAILURE);
+        }
+        buffer->buffer_size = new_size;
     }
     memmove(&buffer->buffer[buffer->data_size], string, str_size);
     buffer->data_size = chkadd(buffer->data_size, str_size);
