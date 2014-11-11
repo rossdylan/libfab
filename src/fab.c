@@ -319,8 +319,6 @@ xcolor_image_t *image_to_xterm(char *path) {
     size_t width = 0;
     size_t height = 0;
     while(MagickNextImage(wand) != MagickFalse) {
-        MagickTransformImageColorspace(wand, RGBColorspace);
-
         // Get the actual width and height of the original image
         im_height = MagickGetImageHeight(wand);
         im_width = MagickGetImageWidth(wand);
