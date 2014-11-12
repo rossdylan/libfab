@@ -148,9 +148,11 @@ int main(int argc, char** argv) {
     printf("256HI-ing it up: '%s'\n", h256);
     free(h256);
 
-    xcolor_image_t *image = image_to_xterm("/home/rossdylan/Downloads/10469154_10204348274165961_3225173628639169213_o.jpg");
-    char *image_text = image_to_string(image);
-    printf("%s", image_text);
-    free(image_text);
-    xcolor_image_free(image);
+    if(argc >= 2) {
+        xcolor_image_t *image = image_to_xterm(argv[1]);
+        char *image_text = image_to_string(image);
+        printf("%s", image_text);
+        free(image_text);
+        xcolor_image_free(image);
+    }
 }
