@@ -19,7 +19,6 @@
 #define sqr(x) ((x) * (x))
 char *make_format(size_t len);
 char *escape(size_t len, ...);
-rgb_t xterm_to_rgb(int xcolor);
 char *colorize(char* start, char* end, const char* line);
 int rgb_to_xterm(int r, int g, int b);
 int xterm_to_rgb_i(int xcolor);

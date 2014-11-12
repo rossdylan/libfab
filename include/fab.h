@@ -66,4 +66,5 @@ size_t min(size_t x, size_t y);
 xcolor_image_t *image_to_xterm(const char *path);
 char *image_to_string(const xcolor_image_t *image);
 void xcolor_image_free(xcolor_image_t *image);
+rgb_t xterm_to_rgb(int xcolor);
 #endif
