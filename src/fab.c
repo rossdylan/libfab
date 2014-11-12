@@ -296,7 +296,7 @@ size_t min(size_t x, size_t y) {
     return y;
 }
 
-xcolor_image_t *image_to_xterm(char *path) {
+xcolor_image_t *image_to_xterm(const char *path) {
     struct winsize ws;
     ioctl(0, TIOCGWINSZ, &ws);
     MagickWand *wand;
@@ -374,7 +374,7 @@ void xcolor_image_free(xcolor_image_t *image) {
     image = NULL;
 }
 
-char *image_to_string(xcolor_image_t *image) {
+char *image_to_string(const xcolor_image_t *image) {
     fab_buffer_t *buffer;
     if((buffer = malloc(sizeof(fab_buffer_t))) == NULL) {
         perror("malloc");

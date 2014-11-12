@@ -63,7 +63,7 @@ char *background_256(rgb_t color, const char *line);
 char *highlight_256(rgb_t color, const char *line);
 
 size_t min(size_t x, size_t y);
-xcolor_image_t *image_to_xterm(char *path);
-char *image_to_string(xcolor_image_t *image);
+xcolor_image_t *image_to_xterm(const char *path);
+char *image_to_string(const xcolor_image_t *image);
 void xcolor_image_free(xcolor_image_t *image);
 #endif
