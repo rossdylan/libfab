@@ -13,6 +13,8 @@
  */
 
 #define sqr(x) ((x) * (x))
+#define prec_strlen(_str_) ((sizeof(_str_)/sizeof(_str_[0])) - 1)
+
 char *make_format(size_t len);
 char *escape(size_t len, ...);
 rgb_t xterm_to_rgb(int xcolor);
@@ -28,18 +30,20 @@ static rgb_t BASIC16[] = { { 0, 0, 0 }, { 205, 0, 0}, { 0, 205, 0 },
     { 255, 255, 255 } };
 static bool rgb_init = false;
 static rgb_t COLOR_TABLE[256];
-
+static const size_t ESC_SIZE = prec_strlen("\x1b[");
 
 char* make_format(size_t len) {
-    size_t esc_size = strlen("\x1b[");
-    size_t total_length = (len * 2) + (len - 1) + 2 + esc_size;
-    size_t count = esc_size;
-    char *format;
+
+    size_t total_length = (len * 2) + (len - 1) + 2 + ESC_SIZE;
+    size_t count = ESC_SIZE;
+    char *format = NULL;
+
     if((format = calloc(sizeof(char), total_length)) == NULL) {
         perror("malloc");
-        exit(EXIT_FAILURE);
+	goto err;
     }
-    strncpy(format,"\x1b[", esc_size);
+
+    strncpy(format,"\x1b[", ESC_SIZE);
     while(count < total_length-2) {
         format[count] = '%';
         format[count+1] = 'd';
@@ -51,6 +55,8 @@ char* make_format(size_t len) {
     }
     format[total_length-2] = 'm';
     format[total_length-1] = '\0';
+
+err:
     return format;
 }
 
@@ -76,6 +82,16 @@ char *apply_color(Color c, const char *line) {
     char *result;
     char *start;
     char *end;
+
+    result = NULL;
+    start = NULL;
+    end = NULL;
+
+    if(line == NULL) {
+	    fprintf(stderr, "Invalid argument.\n");
+	    goto err;
+    }
+
     switch(c) {
         case BOLD:
             start = escape(1, 1);
@@ -201,15 +217,22 @@ char *apply_color(Color c, const char *line) {
             start = escape(1, 47);
             end = escape(1, 49);
             break;
+    	default:
+	    fprintf(stderr, "Invalid color code.\n");
+	    goto err;
     }
+
     asprintf(&result, "%s%s%s", start, line, end);
     free(start);
     free(end);
+
+err:
     return result;
 }
 
 rgb_t xterm_to_rgb(int xcolor) {
-    rgb_t res;
+    rgb_t res = { -1, -1, -1 };
+
     if (xcolor < 16) {
         res = BASIC16[xcolor];
     } else if (16 <= xcolor && xcolor <= 231) {
@@ -220,6 +243,7 @@ rgb_t xterm_to_rgb(int xcolor) {
     } else if (232 <= xcolor && xcolor <= 255) {
         res.r = res.g = res.b = 8 + (xcolor - 232) * 0x0A;
     }
+
     return res;
 }
 
@@ -264,9 +288,16 @@ int rgb_to_xterm(int r, int g, int b)
 
 char *colorize(char* start, char* end, const char* line) {
     char *result;
-    asprintf(&result, "%s%s%s", start, line, end);
+    int ret;
+
+    ret = asprintf(&result, "%s%s%s", start, line, end);
+    if(ret == -1)
+	    goto err;
+
     free(start);
     free(end);
+
+err:
     return result;
 }
 
