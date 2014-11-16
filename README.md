@@ -8,6 +8,11 @@ however it hasn't seen an update in a while. libfab is a port of the core functi
 Once it is ported wrappers to other languages can be made. I'm working on this to improve my knowledge of C,
 and to improve upon a library I enjoy using.
 
+Dependencies
+============
+
+* ImageMagick
+
 Building
 ========
 
@@ -28,7 +33,7 @@ Porting Status
 - [x] 256color text Coloring
 - [ ] Color Complements
 - [ ] Advanced Color specification
-- [ ] Images -> ASCII
+- [x] Images -> ASCII
 
 Attribution
 ============
