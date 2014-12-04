@@ -7,5 +7,5 @@ install:
   - sudo apt-get install -y imagemagick libmagickwand4 libmagickwand-dev libcunit1 libcunit1-dev
 script:
   - make
-  - make install
+  - sudo make install
   - make test
