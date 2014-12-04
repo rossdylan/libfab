@@ -46,10 +46,37 @@ void test_flip(void) {
     test_generic(FLIP, "\x1b[7mHello There\x1b[27m");
 }
 
+void test_black(void) {
+    test_generic(BLACK, "\x1b[30mHello There\x1b[39m");
+}
+
+void test_red(void) {
+    test_generic(RED, "\x1b[31mHello There\x1b[39m");
+}
+
 void test_green(void) {
     test_generic(GREEN, "\x1b[32mHello There\x1b[39m");
 }
 
+void test_yellow(void) {
+    test_generic(YELLOW, "\x1b[33mHello There\x1b[39m");
+}
+
+void test_blue(void) {
+    test_generic(BLUE, "\x1b[34mHello There\x1b[39m");
+}
+
+void test_magenta(void) {
+    test_generic(MAGENTA, "\x1b[35mHello There\x1b[39m");
+}
+
+void test_cyan(void) {
+    test_generic(CYAN, "\x1b[36mHello There\x1b[39m");
+}
+
+void test_white(void) {
+    test_generic(WHITE, "\x1b[37mHello There\x1b[39m");
+}
 
 int main() {
     CU_pSuite psuite = NULL;
