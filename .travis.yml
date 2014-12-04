@@ -1,0 +1,8 @@
+language: c
+compiler:
+  - clang
+  - gcc
+install:
+  - sudo apt-get update
+  - sudo apt-get install -y imagemagick imagemagick-dev libcunit1 libcunit1-dev
+script: make test
