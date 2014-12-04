@@ -5,4 +5,7 @@ compiler:
 install:
   - sudo apt-get update
   - sudo apt-get install -y imagemagick libmagickwand4 libmagickwand-dev libcunit1 libcunit1-dev
-script: make test
+script:
+  - make
+  - make install
+  - make test
