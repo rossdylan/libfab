@@ -26,6 +26,24 @@ Once tup is built, you need to run `tup init` the first time, then all
 subsequent builds you can use `tup upd` or just `tup` to rebuild libfab and its
 libraries.
 
+Testing
+=======
+In order to run the unit tests you will need to install [CUnit](http://cunit.sourceforge.net/).
+
+```
+make test
+```
+
+Testing Status
+==============
+
+- [x] Text formating
+- [x] Colors
+- [ ] Highlight Colors
+- [ ] Background Colors
+- [ ] 256 colors
+- [ ] Images
+
 Porting Status
 ==============
 - [x] Text Formatting
