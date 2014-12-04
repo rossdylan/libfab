@@ -43,6 +43,7 @@ Testing Status
 - [ ] Background Colors
 - [ ] 256 colors
 - [ ] Images
+- [ ] Buffer Implementation
 
 Porting Status
 ==============
