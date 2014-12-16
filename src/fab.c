@@ -5,6 +5,7 @@
 #include <sys/ioctl.h>
 #include <wand/MagickWand.h>
 #include <math.h>
+#include <limits.h>
 #include "buffer.h"
 
 
@@ -245,7 +246,7 @@ int xterm_to_rgb_i(int xcolor)
 int rgb_to_xterm(int r, int g, int b)
 {
     int best_match = 0;
-    int smallest_distance = 1000000000;
+    int smallest_distance = INT_MAX;
     int c, d;
     if(rgb_init == false) {
        for (c = 0; c < 256; c++) {
