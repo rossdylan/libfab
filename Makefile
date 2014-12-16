@@ -35,6 +35,10 @@ buffer.o: src/buffer.c
 fab.o: src/fab.c
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) src/fab.c
 
+test: libfab.a libfab.so
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o libfab-tests test/fab_tests.c -lfab -lcunit
+	./libfab-tests
+
 .PHONY: install
 install:
 	install -m 0755 libfab.a $(PREFIX)/lib

@@ -1,4 +1,4 @@
-libfab
+libfab - Version 0.1.0
 ======
 
 A port of the python library fabulous to C
@@ -25,6 +25,25 @@ their `bootstrap.sh` script to build the tup binary.
 Once tup is built, you need to run `tup init` the first time, then all
 subsequent builds you can use `tup upd` or just `tup` to rebuild libfab and its
 libraries.
+
+Testing
+=======
+In order to run the unit tests you will need to install [CUnit](http://cunit.sourceforge.net/).
+
+```
+make test
+```
+
+Testing Status
+==============
+
+- [x] Text formating
+- [x] Colors
+- [x] Highlight Colors
+- [x] Background Colors
+- [ ] 256 colors
+- [ ] Images
+- [ ] Buffer Implementation
 
 Porting Status
 ==============
