@@ -8,6 +8,10 @@
 
 #define BUFFER_START_SIZE 32
 
+uint64_t chkmul(uint64_t a, uint64_t b);
+uint64_t chkadd(uint64_t a, uint64_t b);
+uint64_t chksub(uint64_t a, uint64_t b);
+
 uint64_t chkmul(uint64_t a, uint64_t b) {
     if(a == 0 || b == 0) {
         return 0;
