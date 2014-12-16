@@ -78,6 +78,71 @@ void test_white(void) {
     test_generic(WHITE, "\x1b[37mHello There\x1b[39m");
 }
 
+
+void test_hblack(void) {
+    test_generic(HBLACK, "\x1b[1;30;7mHello There\x1b[22;27;39m");
+}
+
+void test_hred(void) {
+    test_generic(HRED, "\x1b[1;31;7mHello There\x1b[22;27;39m");
+}
+
+void test_hgreen(void) {
+    test_generic(HGREEN, "\x1b[1;32;7mHello There\x1b[22;27;39m");
+}
+
+void test_hyellow(void) {
+    test_generic(HYELLOW, "\x1b[1;33;7mHello There\x1b[22;27;39m");
+}
+
+void test_hblue(void) {
+    test_generic(HBLUE, "\x1b[1;34;7mHello There\x1b[22;27;39m");
+}
+
+void test_hmagenta(void) {
+    test_generic(HMAGENTA, "\x1b[1;35;7mHello There\x1b[22;27;39m");
+}
+
+void test_hcyan(void) {
+    test_generic(HCYAN, "\x1b[1;36;7mHello There\x1b[22;27;39m");
+}
+
+void test_hwhite(void) {
+    test_generic(HWHITE, "\x1b[1;37;7mHello There\x1b[22;27;39m");
+}
+
+void test_bgblack(void) {
+    test_generic(BGBLACK, "\x1b[40mHello There\x1b[49m");
+}
+
+void test_bgred(void) {
+    test_generic(BGRED, "\x1b[41mHello There\x1b[49m");
+}
+
+void test_bggreen(void) {
+    test_generic(BGGREEN, "\x1b[42mHello There\x1b[49m");
+}
+
+void test_bgyellow(void) {
+    test_generic(BGYELLOW, "\x1b[43mHello There\x1b[49m");
+}
+
+void test_bgblue(void) {
+    test_generic(BGBLUE, "\x1b[44mHello There\x1b[49m");
+}
+
+void test_bgmagenta(void) {
+    test_generic(BGMAGENTA, "\x1b[45mHello There\x1b[49m");
+}
+
+void test_bgcyan(void) {
+    test_generic(BGCYAN, "\x1b[46mHello There\x1b[49m");
+}
+
+void test_bgwhite(void) {
+    test_generic(BGWHITE, "\x1b[47mHello There\x1b[49m");
+}
+
 int main() {
     CU_pSuite psuite = NULL;
     if(CU_initialize_registry() != CUE_SUCCESS) {
