@@ -1,4 +1,4 @@
-libfab
+libfab - Version 0.1.0
 ======
 
 A port of the python library fabulous to C
@@ -39,8 +39,8 @@ Testing Status
 
 - [x] Text formating
 - [x] Colors
-- [ ] Highlight Colors
-- [ ] Background Colors
+- [x] Highlight Colors
+- [x] Background Colors
 - [ ] 256 colors
 - [ ] Images
 - [ ] Buffer Implementation
