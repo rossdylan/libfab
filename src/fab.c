@@ -381,16 +381,33 @@ char *image_to_string(const xcolor_image_t *image) {
         exit(EXIT_FAILURE);
     }
     init_buffer(buffer);
+    char* start = NULL;
+    char* end = escape(1, 49);
+    bool open = false;
     for(size_t y = 0; y < image->y; y++) {
+        int current_color = 0;
         for(size_t x = 0; x < image->x; x++) {
-            const char *color_block = colorize(escape(3, 48, 5, image->pixels[y][x]), escape(1, 49), " ");
-            append_buffer(buffer, color_block);
-            free((void *)color_block);
+            if(image->pixels[y][x] != current_color) {
+                append_buffer(buffer, end);
+                free(start);
+                start = escape(3, 48, 5, image->pixels[y][x]);
+                append_buffer(buffer, start);
+                open = true;
+            }
+            append_buffer(buffer, " ");
+        }
+        if(open) {
+            append_buffer(buffer, end);
+            open = false;
         }
         append_buffer(buffer, "\n");
     }
     truncate_buffer(buffer);
     char *string = buffer->buffer;
+    if(start != NULL) {
+        free(start);
+    }
+    free(end);
     free(buffer);
     return string;
 }
