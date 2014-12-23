@@ -3,7 +3,18 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <sys/ioctl.h>
+
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wsign-conversion"
+#pragma clang diagnostic ignored "-Wunknown-attributes"
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
 #include <wand/MagickWand.h>
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
+
 #include <math.h>
 #include <limits.h>
 #include "buffer.h"
