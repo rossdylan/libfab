@@ -395,17 +395,21 @@ char *image_to_string(const xcolor_image_t *image) {
     char* start = NULL;
     char* end = escape(1, 49);
     bool open = false;
+    int count = 0;
     for(size_t y = 0; y < image->y; y++) {
         int current_color = 0;
         for(size_t x = 0; x < image->x; x++) {
-            if(image->pixels[y][x] != current_color) {
+            if(open == false || image->pixels[y][x] != current_color) {
+                count = 0;
                 append_buffer(buffer, end);
                 free(start);
                 start = escape(3, 48, 5, image->pixels[y][x]);
                 append_buffer(buffer, start);
                 open = true;
+                current_color = image->pixels[y][x];
             }
             append_buffer(buffer, " ");
+            count++;
         }
         if(open) {
             append_buffer(buffer, end);
@@ -415,9 +419,7 @@ char *image_to_string(const xcolor_image_t *image) {
     }
     truncate_buffer(buffer);
     char *string = buffer->buffer;
-    if(start != NULL) {
-        free(start);
-    }
+    free(start);
     free(end);
     free(buffer);
     return string;
