@@ -48,9 +48,9 @@ void init_buffer(fab_buffer_t *buffer) {
 uint64_t append_buffer(fab_buffer_t *buffer, const char *string) {
     uint64_t str_size = strlen(string);
     uint64_t new_size = buffer->buffer_size;
-	while(chkadd(str_size, buffer->data_size) >= new_size) {
-		new_size = chkmul(new_size, 2);
-	}
+    while(chkadd(str_size, buffer->data_size) >= new_size) {
+        new_size = chkmul(new_size, 2);
+    }
     if(buffer->buffer_size != new_size) {
         if((buffer->buffer = realloc(buffer->buffer, new_size)) == NULL) {
             perror("realloc");
