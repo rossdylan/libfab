@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fab.h>
-#include "buffer.h"
 
 
 int main(int argc, char** argv) {
