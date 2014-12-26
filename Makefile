@@ -42,4 +42,4 @@ install:
 
 .PHONY: clean
 clean:
-	rm -f *.a *.o *.so
+	rm -f *.a *.o *.so libfab-tests
