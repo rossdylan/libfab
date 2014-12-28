@@ -1,4 +1,4 @@
-PREFIX := /usr/local
+PREFIX ?= /usr/local
 
 CFLAGS += -std=c99 -Wall -Wextra -fPIC -pedantic
 CFLAGS += $(shell pkg-config --cflags-only-other MagickWand)
@@ -18,16 +18,18 @@ OBJS := fab.o buffer.o
 
 ARFLAGS=rvs
 
+.PHONY: all
 all: libfab.a libfab.so
 
 $(OBJS): %.o: src/%.c
 
 libfab.so: $(OBJS)
-	$(CC) -shared -o $@ $^
+	$(CC) -shared -o $@ $^ $(LDLIBS)
 
 libfab.a: $(OBJS)
 	$(AR) $(ARFLAGS) $@ $^
 
+.PHONY: test
 test: all
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o libfab-tests test/fab_tests.c -lfab -lcunit
 	./libfab-tests
