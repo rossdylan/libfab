@@ -1,5 +1,17 @@
-CFLAGS = -Wall -Wextra -fPIC -pedantic -ggdb3 -std=c99
+CFLAGS += -Wall -Wextra -fPIC -pedantic -ggdb3 -std=c99
+CFLAGS += `pkg-config --cflags-only-other MagickWand`
+LDLIBS += `pkg-config --libs MagickWand`
+CPPFLAGS += -I./include
+CPPFLAGS += `pkg-config --cflags-only-I MagickWand`
+ifeq ($(CC),gcc)
+	CFLAGS += -ggdb3
+endif
+ifeq ($(CC),clang)
+	CFLAGS += -Qunused-arguments -ggdb -Weverything
+endif
 
-: src/fab.c |> gcc -I./include $(CFLAGS) -c %f -o %o |> %B.o
-: fab.o |> ar rvs %o %f |> libfab.a
-: fab.o |> gcc $(CFLAGS) -shared -o %o %f |> libfab.so
+: foreach src/*.c |> gcc $(CFLAGS) $(CPPFLAGS) -c %f -o %o |> obj/%B.o {objs}
+: {objs} |> ar crvs %o %f |> libfab.a
+: {objs} |> gcc $(CFLAGS) -shared -o %o %f $(LDLIBS) |> libfab.so
+: test/fab_tests.c libfab.so |> gcc $(CFLAGS) $(CPPFLAGS) %f -o %o -lfab -lcunit |> libfab-tests
+: libfab-tests |> env LD_LIBRARY_PATH=.:$(LD_LIBRARY_PATH) ./%f |>

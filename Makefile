@@ -1,9 +1,9 @@
-PREFIX := /usr/local
+PREFIX ?= /usr/local
 
-CPPFLAGS := -I./include
+CFLAGS += -std=c99 -Wall -Wextra -fPIC -pedantic
+CFLAGS += $(shell pkg-config --cflags-only-other MagickWand)
+CPPFLAGS += -I./include
 CPPFLAGS += $(shell pkg-config --cflags-only-I MagickWand)
-
-CFLAGS := -std=c99 -Wall -Wextra -fPIC -pedantic
 
 ifeq ($(CC),gcc)
     CFLAGS += -ggdb3
@@ -12,30 +12,25 @@ ifeq ($(CC),clang)
     CFLAGS += -Qunused-arguments -ggdb -Weverything
 endif
 
-CFLAGS += $(shell pkg-config --cflags-only-other MagickWand)
+LDLIBS += $(shell pkg-config --libs MagickWand)
+VPATH = src
+OBJS := fab.o buffer.o
 
-LIBRARIES := $(shell pkg-config --libs MagickWand)
-
-AR=ar
 ARFLAGS=rvs
 
-SOURCE := $(wildcard src/*.c)
-
+.PHONY: all
 all: libfab.a libfab.so
 
-libfab.so: fab.o buffer.o
-	$(CC) -shared -o libfab.so fab.o buffer.o $(LIBRARIES)
+$(OBJS): %.o: src/%.c
 
-libfab.a: fab.o buffer.o
-	$(AR) $(ARFLAGS) libfab.a fab.o buffer.o
+libfab.so: $(OBJS)
+	$(CC) -shared -o $@ $^ $(LDLIBS)
 
-buffer.o: src/buffer.c
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) src/buffer.c
+libfab.a: $(OBJS)
+	$(AR) $(ARFLAGS) $@ $^
 
-fab.o: src/fab.c
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) src/fab.c
-
-test: libfab.a libfab.so
+.PHONY: test
+test: all
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o libfab-tests test/fab_tests.c -lfab -lcunit
 	./libfab-tests
 
