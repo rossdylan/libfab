@@ -46,7 +46,13 @@ void test_bgmagenta(void);
 void test_bgcyan(void);
 void test_bgwhite(void);
 
-static TestDef TESTS[] = {
+int init_buffer_tests(void);
+int clean_buffer_test(void);
+void test_append_buffer(void);
+void test_append_buffer_expand(void);
+void test_truncate_buffer(void);
+
+static TestDef FORMAT_TESTS[] = {
     {"Test Bold", test_bold},
     {"Test Italic", test_italic},
     {"Test Underline", test_underline},
@@ -80,5 +86,11 @@ static TestDef TESTS[] = {
     {"Test Background White", test_bgwhite}
 };
 
-static size_t NUMTESTS = 31;
+static TestDef BUFFER_TESTS[] = {
+    {"Test Non-expanding Buffer Append", test_append_buffer},
+    {"Test Expanding Buffer Append", test_append_buffer_expand},
+    {"Test Buffer truncation", test_truncate_buffer}
+};
+static size_t NUM_BUFFER_TESTS = sizeof(BUFFER_TESTS) / sizeof(TestDef);
+static size_t NUM_FORMAT_TESTS = sizeof(FORMAT_TESTS) / sizeof(TestDef);
 #endif

@@ -1,7 +1,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include "fab_tests.h"
+#include "buffer.h"
 
+#define malloc_or_fail(_ptr_, _size_) if((_ptr_ = malloc(_size_)) == NULL) { CU_FAIL_FATAL("malloc failed"); return;}
 
 int init_text_tests(void) {
     return 0;
@@ -143,20 +145,92 @@ void test_bgwhite(void) {
     test_generic(BGWHITE, "\x1b[47mHello There\x1b[49m");
 }
 
+int init_buffer_tests(void) {
+    return 0;
+}
+int clean_buffer_tests(void) {
+    return 0;
+}
+
+// Test the buffer implementation when it doesn't need to expand
+// currently that means a string < 32 bytes
+void test_append_buffer(void) {
+    const char *test_string = "Hello";
+    fab_buffer_t *buffer = NULL;
+    malloc_or_fail(buffer, sizeof(fab_buffer_t))
+    init_buffer(buffer);
+    append_buffer(buffer, test_string);
+    // Assert that the string has been append
+    CU_ASSERT(buffer->data_size == strlen(test_string));
+    // Assert that we have not expanded the buffer
+    // ignore the silly magic # 32, its defined as the starting buffer size
+    CU_ASSERT(buffer->buffer_size == 32);
+    // Assert that whats in the buffer is the same as what we added
+    CU_ASSERT(memcmp(buffer->buffer,
+                test_string, strlen(test_string) * sizeof(char)) == 0);
+    free_buffer(buffer);
+}
+
+void test_append_buffer_expand(void) {
+    const char *test_string = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    fab_buffer_t *buffer = NULL;
+    malloc_or_fail(buffer, sizeof(fab_buffer_t))
+    init_buffer(buffer);
+    append_buffer(buffer, test_string);
+    // We copied the right amount of data
+    CU_ASSERT(buffer->data_size == strlen(test_string));
+    // We have expanded the buffer once
+    CU_ASSERT(buffer->buffer_size == 64);
+    // The data in the buffer is correct
+    CU_ASSERT(memcmp(buffer->buffer,
+                test_string, strlen(test_string) * sizeof(char)) == 0);
+    free_buffer(buffer);
+}
+
+void test_truncate_buffer(void) {
+    const char *test_string = "Hello";
+    fab_buffer_t *buffer = NULL;
+    malloc_or_fail(buffer, sizeof(fab_buffer_t));
+    init_buffer(buffer);
+    append_buffer(buffer, test_string);
+    truncate_buffer(buffer);
+    // String sizes match
+    CU_ASSERT(buffer->data_size == strlen(test_string));
+    // Verify that the internal array is now a null-terminated string of the
+    // correct length
+    CU_ASSERT(strlen(buffer->buffer) == strlen(test_string));
+    CU_ASSERT(strcmp(buffer->buffer, test_string) == 0);
+    free_buffer(buffer);
+}
 int main() {
-    CU_pSuite psuite = NULL;
+    CU_pSuite format_suite = NULL;
+    CU_pSuite buffer_suite = NULL;
+
     if(CU_initialize_registry() != CUE_SUCCESS) {
         return CU_get_error();
     }
 
-    psuite = CU_add_suite("Text Formating", init_text_tests, clean_text_tests);
-    if(psuite == NULL) {
+    format_suite = CU_add_suite("Text Formating", init_text_tests, clean_text_tests);
+    if(format_suite == NULL) {
         CU_cleanup_registry();
         return CU_get_error();
     }
 
-    for(size_t i=0; i<NUMTESTS; i++) {
-        if((CU_add_test(psuite, TESTS[i].name, TESTS[i].func) == NULL)) {
+    for(size_t i=0; i<NUM_FORMAT_TESTS; i++) {
+        if((CU_add_test(format_suite, FORMAT_TESTS[i].name, FORMAT_TESTS[i].func) == NULL)) {
+            CU_cleanup_registry();
+            return CU_get_error();
+        }
+    }
+
+    buffer_suite = CU_add_suite("Buffer", init_buffer_tests, clean_buffer_tests);
+    if(buffer_suite == NULL) {
+        CU_cleanup_registry();
+        return CU_get_error();
+    }
+
+    for(size_t i=0; i<NUM_BUFFER_TESTS; i++) {
+        if((CU_add_test(buffer_suite, BUFFER_TESTS[i].name, BUFFER_TESTS[i].func) == NULL)) {
             CU_cleanup_registry();
             return CU_get_error();
         }
