@@ -54,6 +54,13 @@ Porting Status
 - [ ] Advanced Color specification
 - [x] Images -> ASCII
 
+Bindings
+========
+libfab is designed to be used in conjunction with various language bindings.
+Currently there are bindings for Python and DLang
+- [Python Bindings](https://github.com/ryansb/tremendous) by Ryan Brown
+- [DLang Bindings](https://github.com/msoucy/libfabd) by Matt Soucy
+
 Attribution
 ============
 The original [Fabulous](https://github.com/jart/fabulous) was a huge inspiration, and the existing code was a huge help in writing libfab
